@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My First AWS Website</title>
+<style>
+  :root {
+    --bg: #eaf1f4;
+    --ink: #12303b;
+    --muted: #4e6a75;
+    --accent: #1f7a8c;
+    --signal: #f2b134;
+    --panel: #ffffff;
+    --line: #c5d6dc;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+  }
+  main { max-width: 640px; margin: 0 auto; padding: 56px 20px 72px; }
+  h1 { font-size: clamp(2.6rem, 9vw, 4.2rem); line-height: 1.05; margin: 0 0 12px; letter-spacing: -0.02em; }
+  .lead { font-size: 1.15rem; color: var(--muted); margin: 0 0 32px; max-width: 46ch; }
+  .clock {
+    display: inline-block;
+    font-family: "Courier New", monospace;
+    font-size: 1.1rem;
+    background: var(--ink);
+    color: var(--signal);
+    padding: 8px 14px;
+    border-radius: 6px;
+    margin-bottom: 40px;
+  }
+  h2 { font-size: 1.4rem; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 16px; font-size: 0.95rem; }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 8px 20px 20px; }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li { border-bottom: 1px solid var(--line); }
+  li:last-child { border-bottom: 0; }
+  label { display: flex; gap: 12px; align-items: center; padding: 12px 0; cursor: pointer; }
+  input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--accent); flex: none; }
+  input:checked + span { text-decoration: line-through; color: var(--muted); }
+  input:focus-visible { outline: 3px solid var(--signal); outline-offset: 2px; }
+  .bar { height: 10px; background: var(--line); border-radius: 5px; overflow: hidden; margin-top: 12px; }
+  .bar > div { height: 100%; width: 0; background: var(--accent); transition: width .3s ease; }
+  #status { margin: 10px 0 0; font-weight: bold; }
+  footer { margin-top: 32px; color: var(--muted); font-size: 0.9rem; }
+  @media (prefers-reduced-motion: reduce) { .bar > div { transition: none; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Hello from AWS.</h1>
+  <p class="lead">This page was written in one HTML file, pushed to GitHub, and served from Amazon's cloud.</p>
+
+  <div class="clock" id="clock" aria-live="off">--:--:--</div>
+
+  <h2>Deployment checklist</h2>
+  <p class="sub">Tick each step as you finish it. This proves JavaScript works on your hosted page.</p>
+
+  <div class="panel">
+    <ul id="list">
+      <li><label><input type="checkbox"><span>Create a GitHub repository</span></label></li>
+      <li><label><input type="checkbox"><span>Upload index.html to the repository</span></label></li>
+      <li><label><input type="checkbox"><span>Create an AWS account</span></label></li>
+      <li><label><input type="checkbox"><span>Create an S3 bucket or Amplify app</span></label></li>
+      <li><label><input type="checkbox"><span>Upload or connect index.html</span></label></li>
+      <li><label><input type="checkbox"><span>Open the live URL</span></label></li>
+    </ul>
+    <div class="bar"><div id="fill"></div></div>
+    <p id="status">0 of 6 done</p>
+  </div>
+
+  <footer>Edit this file on GitHub, then redeploy to see your changes online.</footer>
+</main>
+
+<script>
+  // Live clock
+  function tick() {
+    document.getElementById("clock").textContent = new Date().toLocaleTimeString();
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  // Checklist progress
+  var boxes = document.querySelectorAll("#list input");
+  function update() {
+    var done = 0;
+    boxes.forEach(function (b) { if (b.checked) done++; });
+    document.getElementById("fill").style.width = (done / boxes.length * 100) + "%";
+    document.getElementById("status").textContent =
+      done === boxes.length ? "All done. Your site is live!" : done + " of " + boxes.length + " done";
+  }
+  boxes.forEach(function (b) { b.addEventListener("change", update); });
+</script>
+</body>
+</html>
